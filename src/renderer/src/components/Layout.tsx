@@ -4,7 +4,7 @@ import Navbar from './Navbar'
 
 export default function Layout(): React.JSX.Element {
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="bg-white min-h-screen">
       <Navbar />
       <main className="container mx-auto px-4 py-8">
         <Outlet />

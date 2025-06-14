@@ -16,13 +16,15 @@ interface CommentResultsProps {
       border?: BorderConfig
     }
   ) => void
+  onUpdateComment?: (studentId: string, newComment: string) => void
 }
 
 export default function CommentResults({
   comments,
   students,
   onCopyAll,
-  onExport
+  onExport,
+  onUpdateComment
 }: CommentResultsProps) {
   const [showExportMenu, setShowExportMenu] = useState(false)
   const [showDocxConfig, setShowDocxConfig] = useState(false)
@@ -152,9 +154,12 @@ export default function CommentResults({
                     复制
                   </button>
                 </div>
-                <p className="text-gray-700 leading-relaxed whitespace-pre-line">
-                  {commentData.comment}
-                </p>
+                <textarea
+                  className="w-full text-gray-700 leading-relaxed border rounded p-2 resize-vertical min-h-[60px] focus:outline-blue-400 h-[200px]"
+                  value={commentData.comment}
+                  onChange={(e) => onUpdateComment && onUpdateComment(studentId, e.target.value)}
+                  placeholder="请输入评语..."
+                />
 
                 {/* 显示基于哪些标签生成的 */}
                 {commentData.usedTags && commentData.usedTags.length > 0 && (

@@ -1,6 +1,6 @@
 interface StatisticsPanelProps {
-  totalStudents: number;
-  filteredStudents: number;
+  totalStudents: number
+  filteredStudents: number
 }
 
 export default function StatisticsPanel({ totalStudents, filteredStudents }: StatisticsPanelProps) {
@@ -21,5 +21,5 @@ export default function StatisticsPanel({ totalStudents, filteredStudents }: Sta
         </div>
       </div>
     </div>
-  );
+  )
 }

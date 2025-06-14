@@ -9,5 +9,5 @@ export default function PageHeader() {
         快速添加和管理学生姓名，数据自动保存到本地
       </p>
     </div>
-  );
+  )
 }

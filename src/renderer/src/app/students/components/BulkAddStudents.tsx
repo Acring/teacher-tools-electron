@@ -1,13 +1,13 @@
 interface BulkAddStudentsProps {
-  bulkStudentNames: string;
-  setBulkStudentNames: (value: string) => void;
-  onAddBulkStudents: () => void;
+  bulkStudentNames: string
+  setBulkStudentNames: (value: string) => void
+  onAddBulkStudents: () => void
 }
 
 export default function BulkAddStudents({
   bulkStudentNames,
   setBulkStudentNames,
-  onAddBulkStudents,
+  onAddBulkStudents
 }: BulkAddStudentsProps) {
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
@@ -22,7 +22,7 @@ export default function BulkAddStudents({
           </label>
           <textarea
             value={bulkStudentNames}
-            onChange={e => setBulkStudentNames(e.target.value)}
+            onChange={(e) => setBulkStudentNames(e.target.value)}
             placeholder="张三,李四,王五 或 张三，李四，王五"
             rows={3}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
@@ -38,5 +38,5 @@ export default function BulkAddStudents({
         </button>
       </div>
     </div>
-  );
+  )
 }

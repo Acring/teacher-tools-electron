@@ -1,13 +1,13 @@
-import { Student } from '@renderer/type/student';
-import { Eye, EyeOff } from 'lucide-react';
-import { useState } from 'react';
+import { Student } from '@renderer/type/student'
+import { Eye, EyeOff } from 'lucide-react'
+import { useState } from 'react'
 
 interface StudentListProps {
-  students: Student[];
-  searchTerm: string;
-  setSearchTerm: (value: string) => void;
-  onEditTags: (student: Student) => void;
-  onDeleteStudent: (id: string) => void;
+  students: Student[]
+  searchTerm: string
+  setSearchTerm: (value: string) => void
+  onEditTags: (student: Student) => void
+  onDeleteStudent: (id: string) => void
 }
 
 export default function StudentList({
@@ -15,23 +15,23 @@ export default function StudentList({
   searchTerm,
   setSearchTerm,
   onEditTags,
-  onDeleteStudent,
+  onDeleteStudent
 }: StudentListProps) {
-  const [visibleTags, setVisibleTags] = useState<Set<string>>(new Set());
+  const [visibleTags, setVisibleTags] = useState<Set<string>>(new Set())
 
-  const filteredStudents = students.filter(student =>
+  const filteredStudents = students.filter((student) =>
     student.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  )
 
   const toggleTagVisibility = (studentId: string) => {
-    const newVisibleTags = new Set(visibleTags);
+    const newVisibleTags = new Set(visibleTags)
     if (newVisibleTags.has(studentId)) {
-      newVisibleTags.delete(studentId);
+      newVisibleTags.delete(studentId)
     } else {
-      newVisibleTags.add(studentId);
+      newVisibleTags.add(studentId)
     }
-    setVisibleTags(newVisibleTags);
-  };
+    setVisibleTags(newVisibleTags)
+  }
 
   return (
     <div className="space-y-6">
@@ -42,7 +42,7 @@ export default function StudentList({
           <input
             type="text"
             value={searchTerm}
-            onChange={e => setSearchTerm(e.target.value)}
+            onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="输入姓名搜索..."
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
           />
@@ -97,7 +97,7 @@ export default function StudentList({
                             ...student.evaluationTags.discipline,
                             ...student.evaluationTags.academic,
                             ...student.evaluationTags.homework,
-                            ...student.evaluationTags.physicalLabor,
+                            ...student.evaluationTags.physicalLabor
                           ]
                             .slice(0, 3)
                             .map((tag, tagIndex) => (
@@ -113,7 +113,7 @@ export default function StudentList({
                             ...student.evaluationTags.discipline,
                             ...student.evaluationTags.academic,
                             ...student.evaluationTags.homework,
-                            ...student.evaluationTags.physicalLabor,
+                            ...student.evaluationTags.physicalLabor
                           ].length > 3 && (
                             <span className="px-2 py-1 text-xs bg-gray-100 text-gray-600 rounded-full">
                               +
@@ -122,7 +122,7 @@ export default function StudentList({
                                 ...student.evaluationTags.discipline,
                                 ...student.evaluationTags.academic,
                                 ...student.evaluationTags.homework,
-                                ...student.evaluationTags.physicalLabor,
+                                ...student.evaluationTags.physicalLabor
                               ].length - 3}
                             </span>
                           )}
@@ -151,5 +151,5 @@ export default function StudentList({
         )}
       </div>
     </div>
-  );
+  )
 }

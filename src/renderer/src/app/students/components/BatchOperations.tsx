@@ -1,9 +1,9 @@
 interface BatchOperationsProps {
-  studentCount: number;
-  onImportSample: () => void;
-  onExportData: () => void;
-  onImportData: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onClearAll: () => void;
+  studentCount: number
+  onImportSample: () => void
+  onExportData: () => void
+  onImportData: (event: React.ChangeEvent<HTMLInputElement>) => void
+  onClearAll: () => void
 }
 
 export default function BatchOperations({
@@ -11,7 +11,7 @@ export default function BatchOperations({
   onImportSample,
   onExportData,
   onImportData,
-  onClearAll,
+  onClearAll
 }: BatchOperationsProps) {
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
@@ -56,5 +56,5 @@ export default function BatchOperations({
         </button>
       </div>
     </div>
-  );
+  )
 }

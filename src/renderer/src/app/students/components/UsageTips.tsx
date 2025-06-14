@@ -12,5 +12,5 @@ export default function UsageTips() {
         <li>• 点击&ldquo;编辑标签&rdquo;可以为学生添加评价标签，系统会自动检测冲突标签</li>
       </ul>
     </div>
-  );
+  )
 }

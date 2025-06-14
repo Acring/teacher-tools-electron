@@ -1,15 +1,15 @@
-import { Student, EvaluationTags } from '../../../type/student';
-import { TAG_OPTIONS, EXCLUSIVE_TAG_GROUPS } from '../../../constants/evaluation-tags';
+import { Student, EvaluationTags } from '../../../type/student'
+import { TAG_OPTIONS, EXCLUSIVE_TAG_GROUPS } from '../../../constants/evaluation-tags'
 
 interface TagEditorProps {
-  isOpen: boolean;
-  student: Student | null;
-  editingTags: EvaluationTags | null;
-  onClose: () => void;
-  onSave: () => void;
-  onSaveAndNext: () => void;
-  onToggleTag: (category: keyof EvaluationTags, tag: string) => void;
-  hasNextStudent: boolean;
+  isOpen: boolean
+  student: Student | null
+  editingTags: EvaluationTags | null
+  onClose: () => void
+  onSave: () => void
+  onSaveAndNext: () => void
+  onToggleTag: (category: keyof EvaluationTags, tag: string) => void
+  hasNextStudent: boolean
 }
 
 export default function TagEditor({
@@ -20,20 +20,20 @@ export default function TagEditor({
   onSave,
   onSaveAndNext,
   onToggleTag,
-  hasNextStudent,
+  hasNextStudent
 }: TagEditorProps) {
-  if (!isOpen || !student || !editingTags) return null;
+  if (!isOpen || !student || !editingTags) return null
 
   // 检查标签是否与已选标签互斥
   const isTagExclusive = (tag: string, currentTags: string[]): boolean => {
     for (const group of EXCLUSIVE_TAG_GROUPS) {
       if (group.includes(tag)) {
         // 检查是否有其他同组标签已被选择
-        return currentTags.some(selectedTag => group.includes(selectedTag) && selectedTag !== tag);
+        return currentTags.some((selectedTag) => group.includes(selectedTag) && selectedTag !== tag)
       }
     }
-    return false;
-  };
+    return false
+  }
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
@@ -49,23 +49,23 @@ export default function TagEditor({
 
         <div className="p-6 space-y-6">
           {Object.entries(TAG_OPTIONS).map(([category, options]) => {
-            const categoryKey = category as keyof EvaluationTags;
+            const categoryKey = category as keyof EvaluationTags
             const categoryNames = {
               characteristics: '学生特点',
               discipline: '纪律表现',
               academic: '学习成绩',
               homework: '作业情况',
-              physicalLabor: '体育劳动',
-            };
+              physicalLabor: '体育劳动'
+            }
 
-            const selectedTags = editingTags[categoryKey] || [];
+            const selectedTags = editingTags[categoryKey] || []
             const allCurrentTags = [
               ...editingTags.characteristics,
               ...editingTags.discipline,
               ...editingTags.academic,
               ...editingTags.homework,
-              ...editingTags.physicalLabor,
-            ];
+              ...editingTags.physicalLabor
+            ]
 
             return (
               <div key={category} className="border border-gray-200 rounded-lg p-4">
@@ -75,9 +75,9 @@ export default function TagEditor({
                 <div className="mb-4">
                   <h4 className="text-sm font-medium text-green-700 mb-2">正面评价</h4>
                   <div className="flex flex-wrap gap-2">
-                    {options.positive.map(tag => {
-                      const isSelected = selectedTags.includes(tag);
-                      const isDisabled = !isSelected && isTagExclusive(tag, allCurrentTags);
+                    {options.positive.map((tag) => {
+                      const isSelected = selectedTags.includes(tag)
+                      const isDisabled = !isSelected && isTagExclusive(tag, allCurrentTags)
 
                       return (
                         <button
@@ -94,7 +94,7 @@ export default function TagEditor({
                         >
                           {tag}
                         </button>
-                      );
+                      )
                     })}
                   </div>
                 </div>
@@ -103,9 +103,9 @@ export default function TagEditor({
                 <div>
                   <h4 className="text-sm font-medium text-red-700 mb-2">待改进</h4>
                   <div className="flex flex-wrap gap-2">
-                    {options.negative.map(tag => {
-                      const isSelected = selectedTags.includes(tag);
-                      const isDisabled = !isSelected && isTagExclusive(tag, allCurrentTags);
+                    {options.negative.map((tag) => {
+                      const isSelected = selectedTags.includes(tag)
+                      const isDisabled = !isSelected && isTagExclusive(tag, allCurrentTags)
 
                       return (
                         <button
@@ -122,12 +122,12 @@ export default function TagEditor({
                         >
                           {tag}
                         </button>
-                      );
+                      )
                     })}
                   </div>
                 </div>
               </div>
-            );
+            )
           })}
         </div>
 
@@ -155,5 +155,5 @@ export default function TagEditor({
         </div>
       </div>
     </div>
-  );
+  )
 }

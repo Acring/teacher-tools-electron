@@ -1,15 +1,15 @@
 interface CommentSettingsProps {
-  style: string;
-  length: string;
-  onStyleChange: (style: string) => void;
-  onLengthChange: (length: string) => void;
+  style: string
+  length: string
+  onStyleChange: (style: string) => void
+  onLengthChange: (length: string) => void
 }
 
 export default function CommentSettings({
   style,
   length,
   onStyleChange,
-  onLengthChange,
+  onLengthChange
 }: CommentSettingsProps) {
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
@@ -22,7 +22,7 @@ export default function CommentSettings({
           <label className="block text-sm font-medium text-gray-700 mb-2">评语风格</label>
           <select
             value={style}
-            onChange={e => onStyleChange(e.target.value)}
+            onChange={(e) => onStyleChange(e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="encouraging">温馨鼓励型</option>
@@ -35,7 +35,7 @@ export default function CommentSettings({
           <label className="block text-sm font-medium text-gray-700 mb-2">评语长度</label>
           <select
             value={length}
-            onChange={e => onLengthChange(e.target.value)}
+            onChange={(e) => onLengthChange(e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="short">简洁版 (50-80字)</option>
@@ -45,5 +45,5 @@ export default function CommentSettings({
         </div>
       </div>
     </div>
-  );
+  )
 }

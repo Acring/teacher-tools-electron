@@ -1,82 +1,82 @@
-import { Student } from '@renderer/type/student';
-import { useState, useEffect, useRef } from 'react';
-import { BorderConfig } from '../utils/export-utils';
-import DocxExportDialog from './DocxExportDialog';
+import { Student } from '@renderer/type/student'
+import { useState, useEffect, useRef } from 'react'
+import { BorderConfig } from '../utils/export-utils'
+import DocxExportDialog from './DocxExportDialog'
 
 interface CommentResultsProps {
-  comments: { [key: string]: { comment: string; usedTags: string[] } };
-  students: Student[];
-  onCopyAll: () => void;
+  comments: { [key: string]: { comment: string; usedTags: string[] } }
+  students: Student[]
+  onCopyAll: () => void
   onExport: (
     format: 'docx' | 'txt',
     config?: {
-      commentsPerLine?: number;
-      fontSize?: number;
-      fontFamily?: string;
-      border?: BorderConfig;
+      commentsPerLine?: number
+      fontSize?: number
+      fontFamily?: string
+      border?: BorderConfig
     }
-  ) => void;
+  ) => void
 }
 
 export default function CommentResults({
   comments,
   students,
   onCopyAll,
-  onExport,
+  onExport
 }: CommentResultsProps) {
-  const [showExportMenu, setShowExportMenu] = useState(false);
-  const [showDocxConfig, setShowDocxConfig] = useState(false);
-  const exportMenuRef = useRef<HTMLDivElement>(null);
+  const [showExportMenu, setShowExportMenu] = useState(false)
+  const [showDocxConfig, setShowDocxConfig] = useState(false)
+  const exportMenuRef = useRef<HTMLDivElement>(null)
 
   // 处理点击外部区域关闭菜单
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (exportMenuRef.current && !exportMenuRef.current.contains(event.target as Node)) {
-        setShowExportMenu(false);
+        setShowExportMenu(false)
       }
-    };
+    }
 
     if (showExportMenu) {
-      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('mousedown', handleClickOutside)
     }
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [showExportMenu]);
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [showExportMenu])
 
   const copyComment = (comment: string) => {
-    navigator.clipboard.writeText(comment);
+    navigator.clipboard.writeText(comment)
     // 可以添加一个简单的提示
-    const originalText = '复制';
-    const button = event?.target as HTMLButtonElement;
+    const originalText = '复制'
+    const button = event?.target as HTMLButtonElement
     if (button) {
-      button.textContent = '已复制!';
+      button.textContent = '已复制!'
       setTimeout(() => {
-        button.textContent = originalText;
-      }, 1000);
+        button.textContent = originalText
+      }, 1000)
     }
-  };
+  }
 
   const handleExport = (format: 'docx' | 'txt') => {
     if (format === 'docx') {
-      setShowDocxConfig(true);
-      setShowExportMenu(false);
+      setShowDocxConfig(true)
+      setShowExportMenu(false)
     } else {
-      onExport(format);
-      setShowExportMenu(false);
+      onExport(format)
+      setShowExportMenu(false)
     }
-  };
+  }
 
   const handleDocxExport = (config: {
-    commentsPerLine: number;
-    fontSize: number;
-    fontFamily: string;
-    border: BorderConfig;
+    commentsPerLine: number
+    fontSize: number
+    fontFamily: string
+    border: BorderConfig
   }) => {
-    onExport('docx', config);
-    setShowDocxConfig(false);
-  };
+    onExport('docx', config)
+    setShowDocxConfig(false)
+  }
 
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
@@ -140,7 +140,7 @@ export default function CommentResults({
       ) : (
         <div className="space-y-4">
           {Object.entries(comments).map(([studentId, commentData]) => {
-            const student = students.find(s => s.id === studentId);
+            const student = students.find((s) => s.id === studentId)
             return (
               <div key={studentId} className="border border-gray-200 rounded-lg p-4">
                 <div className="flex items-center justify-between mb-2">
@@ -166,10 +166,10 @@ export default function CommentResults({
                   </div>
                 )}
               </div>
-            );
+            )
           })}
         </div>
       )}
     </div>
-  );
+  )
 }

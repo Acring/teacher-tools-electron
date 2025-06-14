@@ -1,11 +1,11 @@
-'use client';
+'use client'
 
-import { useState } from 'react';
-import { BorderTemplate, BorderConfig } from '../utils/export-utils';
+import { useState } from 'react'
+import { BorderTemplate, BorderConfig } from '../utils/export-utils'
 
 interface BorderTemplateSelectorProps {
-  value?: BorderConfig;
-  onChange: (borderConfig: BorderConfig) => void;
+  value?: BorderConfig
+  onChange: (borderConfig: BorderConfig) => void
 }
 
 // 边框模版描述
@@ -16,8 +16,8 @@ const TEMPLATE_DESCRIPTIONS = {
   dotted: { name: '点线边框', description: '灰色点线边框' },
   dashed: { name: '虚线边框', description: '灰色虚线边框' },
   thick: { name: '粗线边框', description: '深灰色粗线边框' },
-  decorative: { name: '装饰边框', description: '蓝色双线装饰边框' },
-};
+  decorative: { name: '装饰边框', description: '蓝色双线装饰边框' }
+}
 
 // 边框预览样式映射
 const PREVIEW_STYLES = {
@@ -27,41 +27,41 @@ const PREVIEW_STYLES = {
   dotted: 'border-2 border-dotted border-gray-500',
   dashed: 'border-2 border-dashed border-gray-500',
   thick: 'border-4 border-gray-700',
-  decorative: 'border-4 border-double border-blue-600',
-};
+  decorative: 'border-4 border-double border-blue-600'
+}
 
 export default function BorderTemplateSelector({ value, onChange }: BorderTemplateSelectorProps) {
   const [selectedTemplate, setSelectedTemplate] = useState<BorderTemplate>(
     value?.template || 'simple'
-  );
-  const [customColor, setCustomColor] = useState(value?.color || '');
-  const [customSize, setCustomSize] = useState(value?.size?.toString() || '');
+  )
+  const [customColor, setCustomColor] = useState(value?.color || '')
+  const [customSize, setCustomSize] = useState(value?.size?.toString() || '')
 
   const handleTemplateChange = (template: BorderTemplate) => {
-    setSelectedTemplate(template);
+    setSelectedTemplate(template)
     onChange({
       template,
       color: customColor || undefined,
-      size: customSize ? parseInt(customSize) : undefined,
-    });
-  };
+      size: customSize ? parseInt(customSize) : undefined
+    })
+  }
 
   const handleCustomChange = () => {
     onChange({
       template: selectedTemplate,
       color: customColor || undefined,
-      size: customSize ? parseInt(customSize) : undefined,
-    });
-  };
+      size: customSize ? parseInt(customSize) : undefined
+    })
+  }
 
   return (
     <div className="space-y-4">
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">边框模版</label>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-          {(Object.keys(TEMPLATE_DESCRIPTIONS) as BorderTemplate[]).map(template => {
-            const desc = TEMPLATE_DESCRIPTIONS[template];
-            const isSelected = selectedTemplate === template;
+          {(Object.keys(TEMPLATE_DESCRIPTIONS) as BorderTemplate[]).map((template) => {
+            const desc = TEMPLATE_DESCRIPTIONS[template]
+            const isSelected = selectedTemplate === template
 
             return (
               <div
@@ -99,7 +99,7 @@ export default function BorderTemplateSelector({ value, onChange }: BorderTempla
                   </div>
                 )}
               </div>
-            );
+            )
           })}
         </div>
       </div>
@@ -117,9 +117,9 @@ export default function BorderTemplateSelector({ value, onChange }: BorderTempla
                 <input
                   type="color"
                   value={customColor ? `#${customColor}` : '#000000'}
-                  onChange={e => {
-                    const color = e.target.value.replace('#', '');
-                    setCustomColor(color);
+                  onChange={(e) => {
+                    const color = e.target.value.replace('#', '')
+                    setCustomColor(color)
                   }}
                   onBlur={handleCustomChange}
                   className="w-10 h-8 rounded border border-gray-300"
@@ -127,7 +127,7 @@ export default function BorderTemplateSelector({ value, onChange }: BorderTempla
                 <input
                   type="text"
                   value={customColor}
-                  onChange={e => setCustomColor(e.target.value.replace('#', ''))}
+                  onChange={(e) => setCustomColor(e.target.value.replace('#', ''))}
                   onBlur={handleCustomChange}
                   placeholder="自动选择"
                   className="flex-1 px-3 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -142,7 +142,7 @@ export default function BorderTemplateSelector({ value, onChange }: BorderTempla
               <input
                 type="number"
                 value={customSize}
-                onChange={e => setCustomSize(e.target.value)}
+                onChange={(e) => setCustomSize(e.target.value)}
                 onBlur={handleCustomChange}
                 placeholder="自动选择"
                 min="1"
@@ -179,5 +179,5 @@ export default function BorderTemplateSelector({ value, onChange }: BorderTempla
         </div>
       </div>
     </div>
-  );
+  )
 }

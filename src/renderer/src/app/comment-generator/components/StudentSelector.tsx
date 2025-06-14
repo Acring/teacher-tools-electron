@@ -1,14 +1,14 @@
-import { Link } from 'react-router-dom';
-import { Student } from '@renderer/type/student';
+import { Link } from 'react-router-dom'
+import { Student } from '@renderer/type/student'
 
 interface StudentSelectorProps {
-  students: Student[];
-  selectedStudents: Set<string>;
-  isLoaded: boolean;
-  isGenerating: boolean;
-  onToggleStudent: (studentId: string) => void;
-  onToggleSelectAll: () => void;
-  onGenerate: () => void;
+  students: Student[]
+  selectedStudents: Set<string>
+  isLoaded: boolean
+  isGenerating: boolean
+  onToggleStudent: (studentId: string) => void
+  onToggleSelectAll: () => void
+  onGenerate: () => void
 }
 
 export default function StudentSelector({
@@ -18,7 +18,7 @@ export default function StudentSelector({
   isGenerating,
   onToggleStudent,
   onToggleSelectAll,
-  onGenerate,
+  onGenerate
 }: StudentSelectorProps) {
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
@@ -66,7 +66,7 @@ export default function StudentSelector({
         </div>
       ) : (
         <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-          {students.map(student => (
+          {students.map((student) => (
             <div
               key={student.id}
               onClick={() => onToggleStudent(student.id)}
@@ -91,5 +91,5 @@ export default function StudentSelector({
         </div>
       )}
     </div>
-  );
+  )
 }

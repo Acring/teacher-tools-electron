@@ -8,6 +8,7 @@ import BatchOperations from './components/BatchOperations'
 import StudentList from './components/StudentList'
 import TagEditor from './components/TagEditor'
 import UsageTips from './components/UsageTips'
+import * as XLSX from 'xlsx'
 
 export default function StudentsPage() {
   const [bulkStudentNames, setBulkStudentNames] = useState('')
@@ -65,6 +66,36 @@ export default function StudentsPage() {
     openNextStudent(editingStudent)
   }
 
+  // 处理 Excel 导入
+  const handleImportExcel = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (!file) return
+
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      const data = new Uint8Array(e.target?.result as ArrayBuffer)
+      const workbook = XLSX.read(data, { type: 'array' })
+      const sheetName = workbook.SheetNames[0]
+      const worksheet = workbook.Sheets[sheetName]
+      const json: unknown[][] = XLSX.utils.sheet_to_json(worksheet, { header: 1 })
+      if (!json.length) return
+
+      const headerRow = json[0].map((cell) => ((cell || '') as string).toString().trim())
+      // 判断是否有表头
+      const nameKeys = ['姓名', '名字', 'name', 'Name']
+      const names: string[] = json
+        .slice(headerRow.some((cell) => nameKeys.includes(cell)) ? 1 : 0)
+        .map((row) => (row[0] || '').toString().trim())
+        .filter(Boolean)
+      if (names.length) {
+        addBulkStudents(names.join(','))
+      }
+    }
+    reader.readAsArrayBuffer(file)
+    // 清空 input 以便连续导入
+    event.target.value = ''
+  }
+
   return (
     <div className="max-w-6xl mx-auto">
       <PageHeader />
@@ -87,7 +118,15 @@ export default function StudentsPage() {
             studentCount={students.length}
             onImportSample={importSampleData}
             onExportData={exportData}
-            onImportData={importData}
+            onImportData={(e) => {
+              // 判断文件类型
+              const file = e.target.files?.[0]
+              if (file && (file.name.endsWith('.xlsx') || file.name.endsWith('.xls'))) {
+                handleImportExcel(e)
+              } else {
+                importData(e)
+              }
+            }}
             onClearAll={clearAllStudents}
           />
         </div>

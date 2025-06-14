@@ -132,16 +132,42 @@ export class SimpleCommentGenerator {
    * 获取标签对应的模板
    */
   private static getTemplateForTag(tag: string, isPositive: boolean): string | null {
-    const templates = isPositive ? COMMENT_TEMPLATES : IMPROVEMENT_TEMPLATES
+    // 优先读取 localStorage
+    let templates: Record<string, string[]> | null = null
+    if (isPositive) {
+      const raw = localStorage.getItem('commentTemplates')
+      if (raw) {
+        try {
+          templates = JSON.parse(raw)
+        } catch {
+          templates = null
+        }
+      }
+    } else {
+      const raw = localStorage.getItem('improvementTemplates')
+      if (raw) {
+        try {
+          templates = JSON.parse(raw)
+        } catch {
+          templates = null
+        }
+      }
+    }
 
-    // 遍历所有分类查找标签
-    for (const categoryTemplates of Object.values(templates)) {
+    // 先查自定义
+    if (templates && templates[tag] && templates[tag].length > 0) {
+      const tagTemplates = templates[tag]
+      return tagTemplates[Math.floor(Math.random() * tagTemplates.length)]
+    }
+
+    // 没有自定义则查默认
+    const defaultTemplates = isPositive ? COMMENT_TEMPLATES : IMPROVEMENT_TEMPLATES
+    for (const categoryTemplates of Object.values(defaultTemplates) as Record<string, string[]>[]) {
       if (categoryTemplates[tag] && categoryTemplates[tag].length > 0) {
         const tagTemplates = categoryTemplates[tag]
         return tagTemplates[Math.floor(Math.random() * tagTemplates.length)]
       }
     }
-
     return null
   }
 

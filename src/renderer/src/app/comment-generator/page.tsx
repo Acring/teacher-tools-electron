@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Student } from '@renderer/type/student'
 import { SimpleCommentGenerator } from './utils/simple-comment-generator'
 import { exportCommentsToDocx, exportCommentsToTxt, BorderConfig } from './utils/export-utils'
 import StudentSelector from './components/StudentSelector'
 import CommentResults from './components/CommentResults'
 import dayjs from 'dayjs'
+import TemplateManager from './components/TemplateManager'
 
 interface HistoryRecord {
   id: string
@@ -25,6 +26,10 @@ export default function CommentGeneratorPage(): React.JSX.Element {
   const [history, setHistory] = useState<HistoryRecord[]>([])
   const [showHistory, setShowHistory] = useState(false)
   const [currentHistoryId, setCurrentHistoryId] = useState<string | null>(null)
+  const [showTemplateManager, setShowTemplateManager] = useState(false)
+
+  // 新增：用于滚动到评语区域
+  const commentResultsRef = useRef<HTMLDivElement>(null)
 
   // 从 localStorage 加载学生数据
   useEffect(() => {
@@ -125,6 +130,10 @@ export default function CommentGeneratorPage(): React.JSX.Element {
       )
       setGeneratedComments((prev) => ({ ...prev, ...newComments }))
       addHistoryRecord(newComments, students)
+      // 新增：生成后滚动到评语区域
+      setTimeout(() => {
+        commentResultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }, 100)
     } catch (error) {
       console.error('Error generating comments:', error)
       alert('生成评语时出错，请重试')
@@ -196,13 +205,21 @@ export default function CommentGeneratorPage(): React.JSX.Element {
         <p className="text-lg text-gray-600 max-w-2xl mx-auto">
           基于学生标签智能生成个性化评语，提高工作效率，让评语更加贴心和专业
         </p>
-        {/* 历史记录按钮 */}
-        <button
-          className="absolute top-0 right-0 mt-2 mr-2 px-3 py-1 text-sm bg-yellow-100 text-yellow-700 rounded-md hover:bg-yellow-200 transition-colors"
-          onClick={() => setShowHistory(true)}
-        >
-          🕑 历史记录
-        </button>
+        {/* 模版库管理按钮 */}
+        <div className="absolute top-0 right-0 flex gap-2 items-center">
+          <button
+            className="px-3 py-1 text-sm bg-green-100 text-green-700 rounded-md hover:bg-green-200 transition-colors"
+            onClick={() => setShowTemplateManager(true)}
+          >
+            🗂️ 模版库管理
+          </button>
+          <button
+            className="px-3 py-1 text-sm bg-yellow-100 text-yellow-700 rounded-md hover:bg-yellow-200 transition-colors"
+            onClick={() => setShowHistory(true)}
+          >
+            🕑 历史记录
+          </button>
+        </div>
       </div>
 
       {/* 历史记录弹窗 */}
@@ -269,6 +286,9 @@ export default function CommentGeneratorPage(): React.JSX.Element {
         </div>
       )}
 
+      {/* 模版库管理弹窗 */}
+      {showTemplateManager && <TemplateManager onClose={() => setShowTemplateManager(false)} />}
+
       {/* Main Content Area */}
       <div className="grid md:grid-cols-3 gap-8">
         {/*  Student List & Results */}
@@ -285,6 +305,7 @@ export default function CommentGeneratorPage(): React.JSX.Element {
           />
 
           {/* Generated Comments */}
+          <div ref={commentResultsRef} />
           <CommentResults
             comments={generatedComments}
             students={students}

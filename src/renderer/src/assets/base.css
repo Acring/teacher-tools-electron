@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+  outline: none;
+}
+
 :root {
   --text-1: #000000;
   --text-2: #171717;

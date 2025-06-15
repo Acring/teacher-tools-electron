@@ -1,5 +1,12 @@
 
 
+## [1.3.1](https://github.com/Acring/teacher-tools-electron/compare/v1.3.0...v1.3.1) (2025-06-15)
+
+
+### Bug Fixes
+
+* 修复更新报错问题 ([e9713a6](https://github.com/Acring/teacher-tools-electron/commit/e9713a6a306ec0454d3263111b034445e6332862))
+
 # [1.3.0](https://github.com/Acring/teacher-tools-electron/compare/v1.2.1...v1.3.0) (2025-06-15)
 
 

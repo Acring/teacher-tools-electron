@@ -5,7 +5,6 @@ import icon from '../../resources/icon.png?asset'
 import { Presenter } from './presenter'
 import { autoUpdater } from 'electron-updater'
 import { dialog } from 'electron'
-// @ts-expect-error: electron-log 可能没有类型声明
 import log from 'electron-log'
 
 function createWindow(): void {

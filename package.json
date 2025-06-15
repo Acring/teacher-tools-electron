@@ -16,9 +16,9 @@
     "build": "BUILD_TIME=$(date +%Y%m%d%H%M) npm run typecheck && electron-vite build",
     "postinstall": "electron-builder install-app-deps",
     "build:unpack": "npm run build && electron-builder --dir",
-    "build:win": "cross-env BUILD_TIME=$(date +%Y%m%d%H%M) electron-builder --win --x64",
-    "build:mac": "cross-env BUILD_TIME=$(date +%Y%m%d%H%M) electron-builder --mac",
-    "build:linux": "cross-env BUILD_TIME=$(date +%Y%m%d%H%M) electron-builder --linux",
+    "build:win": "npm run build && cross-env BUILD_TIME=$(date +%Y%m%d%H%M) electron-builder --win --x64",
+    "build:mac": "npm run build && cross-env BUILD_TIME=$(date +%Y%m%d%H%M) electron-builder --mac",
+    "build:linux": "npm run build && cross-env BUILD_TIME=$(date +%Y%m%d%H%M) electron-builder --linux",
     "release": "release-it"
   },
   "dependencies": {
@@ -30,6 +30,7 @@
     "clsx": "^2.1.1",
     "dayjs": "^1.11.13",
     "docx": "^9.5.0",
+    "electron-log": "^5.4.1",
     "electron-store": "^10.0.1",
     "electron-updater": "^6.3.9",
     "lucide-react": "^0.514.0",

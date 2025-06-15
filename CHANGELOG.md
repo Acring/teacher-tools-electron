@@ -1,5 +1,12 @@
 
 
+# [1.5.0](https://github.com/Acring/teacher-tools-electron/compare/v1.4.1...v1.5.0) (2025-06-15)
+
+
+### Features
+
+* update ([69f6a08](https://github.com/Acring/teacher-tools-electron/commit/69f6a08257ec59a33307cb393395c8b81422a808))
+
 ## [1.4.1](https://github.com/Acring/teacher-tools-electron/compare/v1.4.0...v1.4.1) (2025-06-15)
 
 

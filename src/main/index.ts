@@ -54,24 +54,6 @@ function setupAutoUpdater() {
     autoUpdater.forceDevUpdateConfig = true
   }
 
-  // 设置更新服务器URL（如果需要的话）
-  // autoUpdater.setFeedURL({
-  //   provider: 'github',
-  //   owner: 'acring',
-  //   repo: 'teacher-tools-electron'
-  // })
-
-  // 添加额外的配置来处理签名问题
-  try {
-    // 尝试禁用签名验证（这是一个可能的解决方案）
-    Object.defineProperty(autoUpdater, 'verifySignature', {
-      value: false,
-      writable: true
-    })
-  } catch (e) {
-    console.warn('无法设置签名验证选项:', e)
-  }
-
   // 检查更新
   autoUpdater.checkForUpdatesAndNotify()
 

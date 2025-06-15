@@ -13,12 +13,12 @@
     "typecheck": "npm run typecheck:node && npm run typecheck:web",
     "start": "electron-vite preview",
     "dev": "electron-vite dev",
-    "build": "BUILD_TIME=$(date +%Y%m%d%H%M) npm run typecheck && electron-vite build",
+    "build": "npm run typecheck && electron-vite build",
     "postinstall": "electron-builder install-app-deps",
     "build:unpack": "npm run build && electron-builder --dir",
-    "build:win": "npm run build && cross-env BUILD_TIME=$(date +%Y%m%d%H%M) electron-builder --win --x64",
-    "build:mac": "npm run build && cross-env BUILD_TIME=$(date +%Y%m%d%H%M) electron-builder --mac",
-    "build:linux": "npm run build && cross-env BUILD_TIME=$(date +%Y%m%d%H%M) electron-builder --linux",
+    "build:win": "npm run build && cross-env electron-builder --win --x64",
+    "build:mac": "npm run build && cross-env electron-builder --mac",
+    "build:linux": "npm run build && cross-env electron-builder --linux",
     "release": "release-it"
   },
   "dependencies": {

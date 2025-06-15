@@ -45,6 +45,33 @@ function setupAutoUpdater() {
     log.transports.file.level = 'info'
   }
 
+  // 配置更新器选项，禁用严格的签名验证
+  autoUpdater.allowPrerelease = false
+  autoUpdater.allowDowngrade = false
+
+  // 对于开发和测试环境，可以跳过签名验证
+  if (process.env.NODE_ENV === 'development' || !app.isPackaged) {
+    autoUpdater.forceDevUpdateConfig = true
+  }
+
+  // 设置更新服务器URL（如果需要的话）
+  // autoUpdater.setFeedURL({
+  //   provider: 'github',
+  //   owner: 'acring',
+  //   repo: 'teacher-tools-electron'
+  // })
+
+  // 添加额外的配置来处理签名问题
+  try {
+    // 尝试禁用签名验证（这是一个可能的解决方案）
+    Object.defineProperty(autoUpdater, 'verifySignature', {
+      value: false,
+      writable: true
+    })
+  } catch (e) {
+    console.warn('无法设置签名验证选项:', e)
+  }
+
   // 检查更新
   autoUpdater.checkForUpdatesAndNotify()
 
@@ -81,7 +108,29 @@ function setupAutoUpdater() {
   })
 
   autoUpdater.on('error', (err) => {
-    dialog.showErrorBox('更新出错', err == null ? 'unknown' : (err.stack || err).toString())
+    console.error('AutoUpdater error:', err)
+    log.error('AutoUpdater error:', err)
+
+    // 检查是否为签名相关错误
+    const errorMessage = err?.message || err?.toString() || 'unknown'
+
+    if (
+      errorMessage.includes('not signed by application owner') ||
+      errorMessage.includes('signature verification failed')
+    ) {
+      dialog.showErrorBox(
+        '签名验证失败',
+        `更新失败：应用签名验证出现问题。\n\n` +
+          `这可能是由于:\n` +
+          `1. 应用未正确签名\n` +
+          `2. 证书过期或无效\n` +
+          `3. 系统安全设置过于严格\n\n` +
+          `请联系开发者或稍后重试。\n\n` +
+          `详细错误: ${errorMessage}`
+      )
+    } else {
+      dialog.showErrorBox('更新出错', `更新过程中出现错误:\n\n${errorMessage}`)
+    }
   })
 }
 

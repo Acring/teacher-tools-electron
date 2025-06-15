@@ -3,6 +3,10 @@ import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import { Presenter } from './presenter'
+import { autoUpdater } from 'electron-updater'
+import { dialog } from 'electron'
+// @ts-expect-error: electron-log 可能没有类型声明
+import log from 'electron-log'
 
 function createWindow(): void {
   // Create the browser window.
@@ -36,6 +40,52 @@ function createWindow(): void {
   }
 }
 
+function setupAutoUpdater() {
+  autoUpdater.logger = log
+  if (log.transports && log.transports.file) {
+    log.transports.file.level = 'info'
+  }
+
+  // 检查更新
+  autoUpdater.checkForUpdatesAndNotify()
+
+  // 监听有新版本
+  autoUpdater.on('update-available', (info) => {
+    let notes = ''
+    if (Array.isArray(info.releaseNotes)) {
+      notes = info.releaseNotes.map((note) => note.note).join('\n')
+    } else {
+      notes = info.releaseNotes || ''
+    }
+    dialog.showMessageBox({
+      type: 'info',
+      title: '发现新版本',
+      message: `检测到新版本 v${info.version}，正在后台下载...`,
+      detail: notes
+    })
+  })
+
+  // 下载完成
+  autoUpdater.on('update-downloaded', () => {
+    dialog
+      .showMessageBox({
+        type: 'info',
+        title: '更新已下载',
+        message: '新版本已下载，是否立即重启应用以应用更新？',
+        buttons: ['现在重启', '稍后']
+      })
+      .then((result) => {
+        if (result.response === 0) {
+          autoUpdater.quitAndInstall()
+        }
+      })
+  })
+
+  autoUpdater.on('error', (err) => {
+    dialog.showErrorBox('更新出错', err == null ? 'unknown' : (err.stack || err).toString())
+  })
+}
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
@@ -55,6 +105,8 @@ app.whenReady().then(() => {
 
   // 初始化 Presenter 系统
   new Presenter()
+
+  setupAutoUpdater()
 
   createWindow()
 

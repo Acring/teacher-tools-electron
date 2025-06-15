@@ -1,5 +1,12 @@
 
 
+## [1.5.1](https://github.com/Acring/teacher-tools-electron/compare/v1.5.0...v1.5.1) (2025-06-15)
+
+
+### Bug Fixes
+
+* change publisherName ([972c62a](https://github.com/Acring/teacher-tools-electron/commit/972c62aa838c33c15aa81b5452e41c0ff63c0e43))
+
 # [1.5.0](https://github.com/Acring/teacher-tools-electron/compare/v1.4.1...v1.5.0) (2025-06-15)
 
 

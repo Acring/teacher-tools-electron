@@ -44,7 +44,7 @@ publish:
   provider: github
   owner: "acring"
   repo: "teacher-tools-electron"
-  token: "${env.GH_TOKEN}"
+  # token: "${env.GH_TOKEN}"
   releaseType: "release"
   publishAutoUpdate: true
   # 可选配置

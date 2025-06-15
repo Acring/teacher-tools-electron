@@ -1,5 +1,12 @@
 
 
+## [1.2.1](https://github.com/Acring/teacher-tools-electron/compare/v1.2.0...v1.2.1) (2025-06-15)
+
+
+### Bug Fixes
+
+* remove token ([1befac5](https://github.com/Acring/teacher-tools-electron/commit/1befac5d40ac0e907bb6ad84deeb8501631f9e03))
+
 # [1.2.0](https://github.com/Acring/teacher-tools-electron/compare/v1.1.5...v1.2.0) (2025-06-15)
 
 

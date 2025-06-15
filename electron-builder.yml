@@ -14,7 +14,7 @@ asarUnpack:
 win:
   executableName: teacher-tools
   certificateFile: "certificates/certificate.pfx"
-  publisherName: "Acring"
+  publisherName: "acring"
   signAndEditExecutable: true
   signDlls: false
 nsis:

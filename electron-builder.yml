@@ -13,10 +13,6 @@ asarUnpack:
   - resources/**
 win:
   executableName: teacher-tools
-  certificateFile: "certificates/certificate.pfx"
-  publisherName: "acring"
-  signAndEditExecutable: true
-  signDlls: false
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}
@@ -45,17 +41,5 @@ linux:
 appImage:
   artifactName: ${name}-${version}.${ext}
 npmRebuild: false
-publish:
-  provider: github
-  owner: "acring"
-  repo: "teacher-tools-electron"
-  # token: "${env.GH_TOKEN}"
-  releaseType: "release"
-  publishAutoUpdate: true
-  # 可选配置
-  # private: false  # 是否为私有仓库
-  # host: "github.com"  # GitHub 服务器地址，默认为 github.com
-  # protocol: "https"  # 协议，默认为 https
-  # updaterCacheDirName: "teacher-tools-updater"  # 更新器缓存目录名
 electronDownload:
   mirror: https://npmmirror.com/mirrors/electron/

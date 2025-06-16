@@ -1,34 +1,105 @@
-# teacher-tools-electron
+# Teacher Tools
 
-An Electron application with React and TypeScript
+一个基于 Electron + React + TypeScript 开发的教师工具桌面应用。
 
-## Recommended IDE Setup
+## 技术栈
 
-- [VSCode](https://code.visualstudio.com/) + [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) + [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+- Electron
+- React 19
+- TypeScript
+- TailwindCSS
+- Vite
+- React Router DOM
+- docx (文档处理)
+- xlsx (表格处理)
 
-## Project Setup
+## 开发环境要求
 
-### Install
+- Node.js (推荐使用 pnpm 作为包管理器)
+- VSCode (推荐)
+  - ESLint 插件
+  - Prettier 插件
+  - Tailwind CSS IntelliSense 插件
+
+## 项目设置
+
+### 安装依赖
 
 ```bash
-$ npm install
+pnpm install
 ```
 
-### Development
+### 开发模式
 
 ```bash
-$ npm run dev
+pnpm dev
 ```
 
-### Build
+### 类型检查
 
 ```bash
-# For windows
-$ npm run build:win
+# 检查 Node 端类型
+pnpm typecheck:node
 
-# For macOS
-$ npm run build:mac
+# 检查 Web 端类型
+pnpm typecheck:web
 
-# For Linux
-$ npm run build:linux
+# 检查所有类型
+pnpm typecheck
 ```
+
+### 代码格式化
+
+```bash
+pnpm format
+```
+
+### 代码检查
+
+```bash
+pnpm lint
+```
+
+## 构建应用
+
+### 开发构建（不打包）
+
+```bash
+pnpm build:unpack
+```
+
+### 生产构建
+
+```bash
+# Windows
+pnpm build:win
+
+# macOS
+pnpm build:mac
+
+# Linux
+pnpm build:linux
+```
+
+## 发布新版本
+
+```bash
+pnpm release
+```
+
+## 项目结构
+
+```
+src/
+├── main/        # Electron 主进程代码
+├── preload/     # 预加载脚本
+├── renderer/    # React 渲染进程代码
+└── shared/      # 共享代码和类型定义
+```
+
+## 主要功能
+
+- 文档处理（基于 docx）
+- 表格处理（基于 xlsx）
+- 自动更新
+- 数据持久化（electron-store）

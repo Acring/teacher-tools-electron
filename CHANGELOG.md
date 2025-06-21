@@ -1,5 +1,12 @@
 
 
+# [1.8.0](https://github.com/Acring/teacher-tools-electron/compare/v1.7.0...v1.8.0) (2025-06-21)
+
+
+### Features
+
+* add GH_TOKEN ([4f4ad45](https://github.com/Acring/teacher-tools-electron/commit/4f4ad4505bafe96fe64a0cb098002d873422458b))
+
 # [1.7.0](https://github.com/Acring/teacher-tools-electron/compare/v1.6.1...v1.7.0) (2025-06-21)
 
 

@@ -1,6 +1,6 @@
 {
   "name": "teacher-tools",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "description": "教师工具箱",
   "main": "./out/main/index.js",
   "author": "acring",

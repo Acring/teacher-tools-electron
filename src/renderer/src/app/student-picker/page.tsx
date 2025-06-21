@@ -181,7 +181,7 @@ export default function StudentPickerPage() {
         </div>
         <h1 className="text-3xl font-bold text-gray-900 mb-2">学生抽奖器</h1>
         <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-          公平随机选择学生进行课堂提问或抽奖活动，让课堂互动更有趣
+          随机选择学生进行课堂提问或抽奖活动，让课堂互动更有趣
         </p>
       </div>
 

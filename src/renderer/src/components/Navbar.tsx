@@ -1,4 +1,5 @@
 import { Link, useLocation } from 'react-router-dom'
+import UpdateChecker from './UpdateChecker'
 
 export default function Navbar() {
   const location = useLocation()
@@ -37,6 +38,11 @@ export default function Navbar() {
                 <span>{item.label}</span>
               </Link>
             ))}
+          </div>
+
+          {/* Update Checker */}
+          <div className="hidden md:block">
+            <UpdateChecker />
           </div>
 
           {/* Mobile menu button */}

@@ -1,5 +1,12 @@
 
 
+# [1.9.0](https://github.com/Acring/teacher-tools-electron/compare/v1.8.0...v1.9.0) (2025-06-25)
+
+
+### Features
+
+* 测试检测更新功能 ([bf52ea7](https://github.com/Acring/teacher-tools-electron/commit/bf52ea7fb895bac8f57942bfe099064cdd4b13a4))
+
 # [1.8.0](https://github.com/Acring/teacher-tools-electron/compare/v1.7.0...v1.8.0) (2025-06-21)
 
 

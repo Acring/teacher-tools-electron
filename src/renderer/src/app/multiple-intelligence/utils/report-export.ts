@@ -15,14 +15,22 @@ import {
   VerticalAlign
 } from 'docx'
 
-// 智能维度映射
+// 智能维度映射 - 更新为具体的测评项目
 export const INTELLIGENCE_MAPPING = {
-  言语语言智能: ['语文', '英语'],
-  逻辑数理智能: ['数学'],
-  自然观察智能: ['科学'],
-  视觉空间智能: ['科创', '美术'],
-  身体运动智能: ['体育'],
-  内省智能: ['劳动']
+  言语语言智能: [
+    '字词小火车',
+    '句子魔法师',
+    '课文金话筒',
+    'Spelling Bee',
+    'Super Reader',
+    'Super Talker'
+  ],
+  逻辑数理智能: ['口算达人', '图形达人', '拼读达人'],
+  自然观察智能: ["'猜分'乐园"],
+  视觉空间智能: ['搭建大比拼', '夏日果园'],
+  身体运动智能: ['跳绳达人'],
+  音乐智能: ["'音'你精彩"],
+  内省智能: ['红领巾我会系', '小书包巧整理']
 }
 
 // 评价模板
@@ -58,6 +66,12 @@ export const EVALUATION_TEMPLATES = {
       '团队合作意识强，体育精神佳',
       '身体控制能力强，动作准确到位'
     ],
+    音乐智能: [
+      '音乐感知能力强，对音乐有深刻理解',
+      '音乐表现力突出，能够准确表达情感',
+      '音乐创作能力优秀，能够创作音乐作品',
+      '音乐鉴赏能力高，能够欣赏不同类型的音乐'
+    ],
     内省智能: [
       '自我认知清晰，善于反思总结',
       '情绪管理能力强，心理素质好',
@@ -91,6 +105,11 @@ export const EVALUATION_TEMPLATES = {
       '身体协调性需要加强，可多进行体育锻炼',
       '运动技能需要练习，建议参与更多体育活动',
       '体能素质有待提高，需要坚持日常锻炼'
+    ],
+    音乐智能: [
+      '音乐感知能力需要加强，建议多听不同类型的音乐',
+      '音乐表现力需要提升，可多练习唱歌和演奏乐器',
+      '音乐创作能力需要培养，鼓励多创作音乐作品'
     ],
     内省智能: [
       '自我认知需要加强，建议多进行反思总结',
@@ -130,6 +149,11 @@ export const EVALUATION_TEMPLATES = {
       '参与团体运动，培养合作精神',
       '练习身体协调性动作，如舞蹈、体操等'
     ],
+    音乐智能: [
+      '多听不同类型的音乐，提升音乐鉴赏能力',
+      '学习音乐理论知识，提高音乐理解能力',
+      '参与音乐活动，如合唱团、乐队等，提升音乐表现力'
+    ],
     内省智能: [
       '养成反思习惯，每日总结学习和生活',
       '学习情绪管理技巧，提升心理素质',
@@ -146,11 +170,12 @@ export function calculateStudentIntelligence(student: StudentData): Record<strin
   Object.entries(INTELLIGENCE_MAPPING).forEach(([intelligence, subjects]) => {
     const scores = subjects
       .map((subject) => {
-        // 查找匹配的科目字段
+        // 精确匹配字段名或查找包含关键词的字段
         const matchingField = Object.keys(student).find(
-          (key) => key.includes(subject) && typeof student[key] === 'number'
+          (key) => key === subject || key.includes(subject) || subject.includes(key)
         )
-        return matchingField ? (student[matchingField] as number) : 0
+        const score = matchingField ? (student[matchingField] as number) : 0
+        return typeof score === 'number' && !isNaN(score) ? score : 0
       })
       .filter((score) => score > 0)
 

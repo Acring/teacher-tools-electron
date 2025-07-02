@@ -14,6 +14,7 @@ import {
   WidthType,
   VerticalAlign
 } from 'docx'
+import JSZip from 'jszip'
 
 // 智能维度映射 - 更新为具体的测评项目
 export const INTELLIGENCE_MAPPING = {
@@ -362,8 +363,9 @@ export function generateEvaluation(
 // 导出单个学生报告
 export async function exportStudentReport(
   student: StudentData,
-  addLog: (message: string) => void
-): Promise<void> {
+  addLog: (message: string) => void,
+  returnBlob: boolean = false
+): Promise<Blob | void> {
   try {
     addLog(`开始生成 ${student.姓名} 的测评报告...`)
 
@@ -390,7 +392,7 @@ export async function exportStudentReport(
     // 生成评价文本
     const strengthEvaluation = generateEvaluation(strengths, '优势智能')
     const weaknessEvaluation = generateEvaluation(weaknesses, '弱势智能')
-    const strategyEvaluation = generateEvaluation([...strengths, ...weaknesses], '提升策略')
+    const strategyEvaluation = generateEvaluation([...weaknesses], '提升策略')
 
     // 创建Word文档
     const doc = new Document({
@@ -579,16 +581,22 @@ export async function exportStudentReport(
 
     // 导出文档
     const blob = await Packer.toBlob(doc)
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = `${student.班级}-${student.姓名}-多元智能测评报告.docx`
-    document.body.appendChild(a)
-    a.click()
-    document.body.removeChild(a)
-    URL.revokeObjectURL(url)
 
-    addLog(`${student.姓名} 的测评报告生成完成并下载`)
+    if (returnBlob) {
+      addLog(`${student.姓名} 的测评报告生成完成`)
+      return blob
+    } else {
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `${student.班级}-${student.姓名}-多元智能测评报告.docx`
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      URL.revokeObjectURL(url)
+
+      addLog(`${student.姓名} 的测评报告生成完成并下载`)
+    }
   } catch (error) {
     addLog(`${student.姓名} 的测评报告生成失败: ${error}`)
     throw error
@@ -603,15 +611,22 @@ export async function batchExportReports(
 ): Promise<void> {
   addLog(`开始批量导出 ${students.length} 名学生的测评报告...`)
 
+  const zip = new JSZip()
+  const successfulReports: Array<{ student: StudentData; blob: Blob }> = []
+
   for (let i = 0; i < students.length; i++) {
     const student = students[i]
     try {
-      await exportStudentReport(student, addLog)
+      const blob = (await exportStudentReport(student, addLog, true)) as Blob
+      if (blob) {
+        successfulReports.push({ student, blob })
+        addLog(`${student.姓名} 的报告已准备好打包`)
+      }
       onProgress?.(i + 1, students.length)
 
       // 添加延迟避免浏览器冻结
       if (i < students.length - 1) {
-        await new Promise((resolve) => setTimeout(resolve, 500))
+        await new Promise((resolve) => setTimeout(resolve, 300))
       }
     } catch (error) {
       addLog(`跳过 ${student.姓名}，继续处理下一个学生: ${error}`)
@@ -619,5 +634,28 @@ export async function batchExportReports(
     }
   }
 
-  addLog(`批量导出完成！`)
+  // 将所有成功生成的报告添加到 zip 文件中
+  if (successfulReports.length > 0) {
+    addLog(`开始打包 ${successfulReports.length} 个报告到 zip 文件...`)
+
+    for (const { student, blob } of successfulReports) {
+      const fileName = `${student.班级}-${student.姓名}-多元智能测评报告.docx`
+      zip.file(fileName, blob)
+    }
+
+    // 生成 zip 文件并下载
+    const zipBlob = await zip.generateAsync({ type: 'blob' })
+    const url = URL.createObjectURL(zipBlob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `多元智能测评报告-${new Date().toISOString().split('T')[0]}.zip`
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
+
+    addLog(`批量导出完成！成功打包 ${successfulReports.length} 个报告`)
+  } else {
+    addLog(`没有成功生成任何报告，请检查数据`)
+  }
 }

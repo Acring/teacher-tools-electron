@@ -5,6 +5,9 @@ import StudentsPage from './app/students/page'
 import StudentPickerPage from './app/student-picker/page'
 import CommentGeneratorPage from './app/comment-generator/page'
 import DocxTestPage from './app/docx-test/page'
+import EchartsTestPage from './app/echarts-test/page'
+import XlsxTestPage from './app/xlsx-test/page'
+import MultipleIntelligencePage from './app/multiple-intelligence/page'
 
 export const router = createHashRouter([
   {
@@ -26,6 +29,18 @@ export const router = createHashRouter([
       {
         path: 'comment-generator',
         element: <CommentGeneratorPage />
+      },
+      {
+        path: 'multiple-intelligence',
+        element: <MultipleIntelligencePage />
+      },
+      {
+        path: 'xlsx-test',
+        element: <XlsxTestPage />
+      },
+      {
+        path: 'echarts-test',
+        element: <EchartsTestPage />
       },
       {
         path: 'docx-test',

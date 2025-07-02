@@ -1,5 +1,19 @@
 import { useState } from 'react'
-import { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType, ImageRun } from 'docx'
+import {
+  Document,
+  Packer,
+  Paragraph,
+  TextRun,
+  HeadingLevel,
+  AlignmentType,
+  ImageRun,
+  Table,
+  TableRow,
+  TableCell,
+  BorderStyle,
+  WidthType,
+  VerticalAlign
+} from 'docx'
 
 export default function DocxTestPage() {
   const [isGenerating, setIsGenerating] = useState(false)
@@ -218,6 +232,236 @@ export default function DocxTestPage() {
     }
   }
 
+  // 测试表格生成
+  const testTableGeneration = async () => {
+    try {
+      setIsGenerating(true)
+      addTestResult('开始测试表格生成...')
+
+      const doc = new Document({
+        sections: [
+          {
+            properties: {},
+            children: [
+              new Paragraph({
+                text: '学生评价表格',
+                heading: HeadingLevel.TITLE,
+                alignment: AlignmentType.CENTER,
+                spacing: { after: 400 }
+              }),
+              new Table({
+                width: {
+                  size: 100,
+                  type: WidthType.PERCENTAGE
+                },
+                borders: {
+                  top: { style: BorderStyle.SINGLE, size: 1 },
+                  bottom: { style: BorderStyle.SINGLE, size: 1 },
+                  left: { style: BorderStyle.SINGLE, size: 1 },
+                  right: { style: BorderStyle.SINGLE, size: 1 },
+                  insideHorizontal: { style: BorderStyle.SINGLE, size: 1 },
+                  insideVertical: { style: BorderStyle.SINGLE, size: 1 }
+                },
+                rows: [
+                  // 表头行
+                  new TableRow({
+                    height: {
+                      value: 800,
+                      rule: 'atLeast'
+                    },
+                    children: [
+                      new TableCell({
+                        children: [
+                          new Paragraph({
+                            children: [
+                              new TextRun({
+                                text: '班级',
+                                bold: true,
+                                size: 24
+                              })
+                            ],
+                            alignment: AlignmentType.CENTER
+                          })
+                        ],
+                        verticalAlign: VerticalAlign.CENTER,
+                        width: { size: 20, type: WidthType.PERCENTAGE }
+                      }),
+                      new TableCell({
+                        children: [
+                          new Paragraph({
+                            children: [
+                              new TextRun({
+                                text: '一（3）',
+                                size: 24
+                              })
+                            ],
+                            alignment: AlignmentType.CENTER
+                          })
+                        ],
+                        verticalAlign: VerticalAlign.CENTER,
+                        width: { size: 30, type: WidthType.PERCENTAGE }
+                      }),
+                      new TableCell({
+                        children: [
+                          new Paragraph({
+                            children: [
+                              new TextRun({
+                                text: '姓名',
+                                bold: true,
+                                size: 24
+                              })
+                            ],
+                            alignment: AlignmentType.CENTER
+                          })
+                        ],
+                        verticalAlign: VerticalAlign.CENTER,
+                        width: { size: 20, type: WidthType.PERCENTAGE }
+                      }),
+                      new TableCell({
+                        children: [
+                          new Paragraph({
+                            children: [
+                              new TextRun({
+                                text: '苹果',
+                                bold: true,
+                                size: 24
+                              })
+                            ],
+                            alignment: AlignmentType.CENTER
+                          })
+                        ],
+                        verticalAlign: VerticalAlign.CENTER,
+                        width: { size: 30, type: WidthType.PERCENTAGE }
+                      })
+                    ]
+                  }),
+                  // 优势智能行
+                  new TableRow({
+                    height: {
+                      value: 800,
+                      rule: 'atLeast'
+                    },
+                    children: [
+                      new TableCell({
+                        children: [
+                          new Paragraph({
+                            children: [
+                              new TextRun({
+                                text: '优势智能',
+                                bold: true,
+                                size: 24
+                              })
+                            ],
+                            alignment: AlignmentType.CENTER
+                          })
+                        ],
+                        verticalAlign: VerticalAlign.CENTER
+                      }),
+                      new TableCell({
+                        children: [
+                          new Paragraph({
+                            text: ' ',
+                            spacing: { after: 600 }
+                          })
+                        ],
+                        columnSpan: 3,
+                        verticalAlign: VerticalAlign.CENTER
+                      })
+                    ]
+                  }),
+                  // 弱势智能行
+                  new TableRow({
+                    height: {
+                      value: 1200,
+                      rule: 'atLeast'
+                    },
+                    children: [
+                      new TableCell({
+                        children: [
+                          new Paragraph({
+                            children: [
+                              new TextRun({
+                                text: '弱势智能',
+                                bold: true,
+                                size: 24
+                              })
+                            ],
+                            alignment: AlignmentType.CENTER
+                          })
+                        ],
+                        verticalAlign: VerticalAlign.CENTER
+                      }),
+                      new TableCell({
+                        children: [
+                          new Paragraph({
+                            text: ' ',
+                            spacing: { after: 600 }
+                          })
+                        ],
+                        columnSpan: 3,
+                        verticalAlign: VerticalAlign.CENTER
+                      })
+                    ]
+                  }),
+                  // 提升策略行
+                  new TableRow({
+                    height: {
+                      value: 2400,
+                      rule: 'atLeast'
+                    },
+                    children: [
+                      new TableCell({
+                        children: [
+                          new Paragraph({
+                            children: [
+                              new TextRun({
+                                text: '提升策略',
+                                bold: true,
+                                size: 24
+                              })
+                            ],
+                            alignment: AlignmentType.CENTER
+                          })
+                        ],
+                        verticalAlign: VerticalAlign.CENTER
+                      }),
+                      new TableCell({
+                        children: [
+                          new Paragraph({
+                            text: ' ',
+                            spacing: { after: 1200 }
+                          })
+                        ],
+                        columnSpan: 3,
+                        verticalAlign: VerticalAlign.CENTER
+                      })
+                    ]
+                  })
+                ]
+              })
+            ]
+          }
+        ]
+      })
+
+      const blob = await Packer.toBlob(doc)
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `docx-test-table-${Date.now()}.docx`
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      URL.revokeObjectURL(url)
+
+      addTestResult('表格DOCX文档创建成功并下载')
+    } catch (error) {
+      addTestResult(`表格DOCX文档创建失败: ${error}`)
+    } finally {
+      setIsGenerating(false)
+    }
+  }
+
   const clearResults = () => {
     setTestResults([])
   }
@@ -252,6 +496,13 @@ export default function DocxTestPage() {
             className="px-4 py-3 bg-green-500 text-white rounded-md hover:bg-green-600 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
           >
             {isGenerating ? '生成中...' : '🖼️ 图片文档测试'}
+          </button>
+          <button
+            onClick={testTableGeneration}
+            disabled={isGenerating}
+            className="px-4 py-3 bg-indigo-500 text-white rounded-md hover:bg-indigo-600 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+          >
+            {isGenerating ? '生成中...' : '📊 表格文档测试'}
           </button>
           <button
             onClick={testCanvasImageGeneration}
@@ -293,6 +544,7 @@ export default function DocxTestPage() {
         <ul className="text-sm text-yellow-700 space-y-1">
           <li>• 基本文档测试：创建包含标题和段落的简单DOCX文档</li>
           <li>• 图片文档测试：创建包含Canvas生成图片的DOCX文档</li>
+          <li>• 表格文档测试：创建包含学生评价表格的DOCX文档</li>
           <li>• Canvas图片测试：仅测试Canvas图片生成功能</li>
           <li>• 所有生成的文档都会自动下载到本地</li>
           <li>• 测试结果会显示在下方的结果框中</li>

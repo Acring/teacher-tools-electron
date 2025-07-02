@@ -9,7 +9,8 @@ export default function Navbar() {
     { href: '/', label: '首页', icon: '🏠' },
     { href: '/students', label: '学生管理', icon: '👥' },
     { href: '/comment-generator', label: '期末评语生成', icon: '✍️' },
-    { href: '/student-picker', label: '学生抽奖', icon: '🎯' }
+    { href: '/student-picker', label: '学生抽奖', icon: '🎯' },
+    { href: '/multiple-intelligence', label: '多元智能测评', icon: '🧠' }
   ]
 
   return (

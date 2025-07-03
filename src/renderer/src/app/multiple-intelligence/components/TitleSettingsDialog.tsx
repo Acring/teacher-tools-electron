@@ -1,4 +1,13 @@
 import { useState, useEffect } from 'react'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter
+} from '../../../components/ui/dialog'
+import { Input } from '../../../components/ui/input'
+import { Button } from '../../../components/ui/button'
 
 interface TitleSettingsDialogProps {
   isOpen: boolean
@@ -30,56 +39,40 @@ export default function TitleSettingsDialog({
     onConfirm(mainTitle, subTitle)
   }
 
-  if (!isOpen) return null
-
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-2xl">
-        <h2 className="text-xl font-semibold text-gray-900 mb-4">设置报告标题</h2>
+    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+      <DialogContent className="w-full max-w-2xl">
+        <DialogHeader>
+          <DialogTitle className="text-xl font-semibold text-gray-900">设置报告标题</DialogTitle>
+        </DialogHeader>
 
-        <div className="space-y-4">
-          <div>
-            <label htmlFor="mainTitle" className="block text-sm font-medium text-gray-700 mb-1">
+        <div className="space-y-4 py-4">
+          <div className="space-y-1">
+            <label htmlFor="mainTitle" className="block text-sm font-medium text-gray-700">
               主标题
             </label>
-            <input
-              type="text"
+            <Input
               id="mainTitle"
               value={mainTitle}
               onChange={(e) => setMainTitle(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
             />
           </div>
 
-          <div>
-            <label htmlFor="subTitle" className="block text-sm font-medium text-gray-700 mb-1">
+          <div className="space-y-1">
+            <label htmlFor="subTitle" className="block text-sm font-medium text-gray-700">
               副标题
             </label>
-            <input
-              type="text"
-              id="subTitle"
-              value={subTitle}
-              onChange={(e) => setSubTitle(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-            />
+            <Input id="subTitle" value={subTitle} onChange={(e) => setSubTitle(e.target.value)} />
           </div>
         </div>
 
-        <div className="mt-6 flex justify-end space-x-3">
-          <button
-            onClick={onClose}
-            className="px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200"
-          >
+        <DialogFooter>
+          <Button variant="outline" onClick={onClose}>
             取消
-          </button>
-          <button
-            onClick={handleConfirm}
-            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-          >
-            确认
-          </button>
-        </div>
-      </div>
-    </div>
+          </Button>
+          <Button onClick={handleConfirm}>确认</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   )
 }

@@ -1,0 +1,11 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+
+## 通用规范
+
+### 代码规范
+
+- 组件代码长度不宜太长，可以抽离的代码抽离成单独的文件

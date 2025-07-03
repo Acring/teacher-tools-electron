@@ -168,6 +168,7 @@ export default function EchartsTestPage() {
         chartInstance.current?.dispose()
       }
     }
+    return () => {}
   }, [])
 
   useEffect(() => {

@@ -19,7 +19,6 @@ export interface StatisticsData {
   max: number
   min: number
   count: number
-  passRate: number
 }
 
-export type ChartType = 'overview' | 'average' | 'distribution' | 'ranking'
+export type ChartType = 'overview' | 'average' | 'ranking' | 'radar'

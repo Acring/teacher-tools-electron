@@ -92,6 +92,15 @@ export default function HomePage(): React.JSX.Element {
       href: '/student-picker',
       color: 'bg-green-500',
       features: ['公平随机', '动画效果', '历史记录', '班级筛选']
+    },
+    {
+      id: 'more',
+      title: '更多工具',
+      description: '更多专业教学辅助工具，满足不同教学场景需求',
+      icon: '🧰',
+      href: '/more',
+      color: 'bg-amber-500',
+      features: ['多元智能测评', '特定教学工具', '数据分析', '持续更新']
     }
   ]
 

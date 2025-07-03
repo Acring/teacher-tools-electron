@@ -1,6 +1,7 @@
 import { useRef, useEffect } from 'react'
 import * as echarts from 'echarts'
 import { StatisticsData, ChartType } from '../types'
+import { INTELLIGENCE_MAPPING } from '../templates/evaluation-templates'
 
 interface ChartSectionProps {
   statistics: StatisticsData[]
@@ -17,6 +18,38 @@ export default function ChartSection({
 }: ChartSectionProps) {
   const chartRef = useRef<HTMLDivElement>(null)
   const chartInstance = useRef<echarts.ECharts | null>(null)
+
+  // 计算智能分组的平均分
+  const calculateIntelligenceGroupAverages = () => {
+    const groupAverages: Record<string, number> = {}
+    const groupCounts: Record<string, number> = {}
+
+    // 初始化分组
+    Object.keys(INTELLIGENCE_MAPPING).forEach((key) => {
+      groupAverages[key] = 0
+      groupCounts[key] = 0
+    })
+
+    // 计算每个分组的总分和项目数
+    statistics.forEach((stat) => {
+      for (const [group, subjects] of Object.entries(INTELLIGENCE_MAPPING)) {
+        if (subjects.includes(stat.subjectName)) {
+          groupAverages[group] += stat.average
+          groupCounts[group] += 1
+          break
+        }
+      }
+    })
+
+    // 计算每个分组的平均分
+    Object.keys(groupAverages).forEach((group) => {
+      if (groupCounts[group] > 0) {
+        groupAverages[group] = +(groupAverages[group] / groupCounts[group]).toFixed(2)
+      }
+    })
+
+    return groupAverages
+  }
 
   // 生成图表配置
   const generateChartOption = (): echarts.EChartsOption => {
@@ -90,38 +123,6 @@ export default function ChartSection({
           ]
         }
 
-      case 'distribution':
-        return {
-          title: { text: '成绩分布情况', left: 'center', top: '2%' },
-          tooltip: { trigger: 'axis' },
-          grid: {
-            top: '10%',
-            left: '3%',
-            right: '4%',
-            bottom: '15%',
-            containLabel: true
-          },
-          xAxis: {
-            type: 'category',
-            data: statistics.map((stat) => stat.subjectName),
-            axisLabel: { rotate: 45, interval: 0 }
-          },
-          yAxis: { type: 'value', name: '及格率 (%)' },
-          series: [
-            {
-              name: '及格率',
-              type: 'bar',
-              data: statistics.map((stat) => ({
-                value: stat.passRate,
-                itemStyle: {
-                  color:
-                    stat.passRate >= 80 ? '#22c55e' : stat.passRate >= 60 ? '#eab308' : '#ef4444'
-                }
-              }))
-            }
-          ]
-        }
-
       case 'ranking': {
         const sortedStats = [...statistics].sort((a, b) => b.average - a.average)
         return {
@@ -145,6 +146,51 @@ export default function ChartSection({
               type: 'bar',
               data: sortedStats.map((stat) => stat.average),
               itemStyle: { color: '#8b5cf6' }
+            }
+          ]
+        }
+      }
+
+      case 'radar': {
+        const groupAverages = calculateIntelligenceGroupAverages()
+        const intelligenceGroups = Object.keys(INTELLIGENCE_MAPPING)
+        const data = intelligenceGroups.map((group) => groupAverages[group] || 0)
+
+        return {
+          title: {
+            text: '多元智能雷达图',
+            left: 'center',
+            top: '2%'
+          },
+          tooltip: {},
+          legend: {
+            data: ['智能分布'],
+            bottom: '5%'
+          },
+          radar: {
+            indicator: intelligenceGroups.map((name) => ({
+              name,
+              max: Math.max(...Object.values(groupAverages)) * 1.2
+            })),
+            radius: '65%',
+            center: ['50%', '55%']
+          },
+          series: [
+            {
+              name: '智能分布',
+              type: 'radar',
+              data: [
+                {
+                  value: data,
+                  name: '智能分布',
+                  areaStyle: {
+                    color: 'rgba(123, 104, 238, 0.4)'
+                  },
+                  lineStyle: {
+                    color: 'rgb(123, 104, 238)'
+                  }
+                }
+              ]
             }
           ]
         }
@@ -287,16 +333,6 @@ export default function ChartSection({
           🥧 平均分对比
         </button>
         <button
-          onClick={() => setActiveChart('distribution')}
-          className={`px-4 py-2 rounded-md transition-colors ${
-            activeChart === 'distribution'
-              ? 'bg-purple-500 text-white'
-              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-          }`}
-        >
-          📈 及格率分布
-        </button>
-        <button
           onClick={() => setActiveChart('ranking')}
           className={`px-4 py-2 rounded-md transition-colors ${
             activeChart === 'ranking'
@@ -305,6 +341,16 @@ export default function ChartSection({
           }`}
         >
           🏆 智能排名
+        </button>
+        <button
+          onClick={() => setActiveChart('radar')}
+          className={`px-4 py-2 rounded-md transition-colors ${
+            activeChart === 'radar'
+              ? 'bg-purple-500 text-white'
+              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+          }`}
+        >
+          📡 智能雷达图
         </button>
       </div>
 

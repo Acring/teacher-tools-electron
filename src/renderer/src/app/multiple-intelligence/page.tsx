@@ -108,16 +108,13 @@ export default function MultipleIntelligencePage() {
         const average = sum / scores.length
         const max = Math.max(...scores)
         const min = Math.min(...scores)
-        const passCount = scores.filter((score) => score >= 3).length // 假设3分及格
-        const passRate = (passCount / scores.length) * 100
 
         stats.push({
           subjectName: field,
           average: Math.round(average * 100) / 100,
           max,
           min,
-          count: scores.length,
-          passRate: Math.round(passRate * 100) / 100
+          count: scores.length
         })
       }
     })

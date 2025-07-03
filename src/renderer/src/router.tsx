@@ -8,6 +8,7 @@ import DocxTestPage from './app/docx-test/page'
 import EchartsTestPage from './app/echarts-test/page'
 import XlsxTestPage from './app/xlsx-test/page'
 import MultipleIntelligencePage from './app/multiple-intelligence/page'
+import MorePage from './app/more/page'
 
 export const router = createHashRouter([
   {
@@ -29,6 +30,10 @@ export const router = createHashRouter([
       {
         path: 'comment-generator',
         element: <CommentGeneratorPage />
+      },
+      {
+        path: 'more',
+        element: <MorePage />
       },
       {
         path: 'multiple-intelligence',

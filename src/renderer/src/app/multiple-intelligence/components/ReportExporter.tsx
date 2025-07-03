@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { StudentData } from '../types'
 import { batchExportReports, exportStudentReport } from '../utils/report-export'
+import TitleSettingsDialog from './TitleSettingsDialog'
 
 interface ReportExporterProps {
   students: StudentData[]
@@ -11,6 +12,9 @@ export default function ReportExporter({ students, addLog }: ReportExporterProps
   const [isExporting, setIsExporting] = useState(false)
   const [exportProgress, setExportProgress] = useState({ current: 0, total: 0 })
   const [selectedStudents, setSelectedStudents] = useState<Set<number>>(new Set())
+  const [isTitleDialogOpen, setIsTitleDialogOpen] = useState(false)
+  const [exportType, setExportType] = useState<'single' | 'selected' | 'all'>('all')
+  const [studentToExport, setStudentToExport] = useState<StudentData | null>(null)
 
   // 处理单个学生选择
   const handleStudentSelect = (index: number, selected: boolean) => {
@@ -32,56 +36,69 @@ export default function ReportExporter({ students, addLog }: ReportExporterProps
     }
   }
 
-  // 导出选中的学生报告
-  const handleExportSelected = async () => {
-    const selectedStudentsList = Array.from(selectedStudents).map((index) => students[index])
+  // 打开标题设置对话框 - 导出所有
+  const openExportAllDialog = () => {
+    setExportType('all')
+    setIsTitleDialogOpen(true)
+  }
 
-    if (selectedStudentsList.length === 0) {
+  // 打开标题设置对话框 - 导出选中
+  const openExportSelectedDialog = () => {
+    if (selectedStudents.size === 0) {
       addLog('请先选择要导出的学生')
       return
     }
+    setExportType('selected')
+    setIsTitleDialogOpen(true)
+  }
+
+  // 打开标题设置对话框 - 导出单个
+  const openExportSingleDialog = (student: StudentData) => {
+    setStudentToExport(student)
+    setExportType('single')
+    setIsTitleDialogOpen(true)
+  }
+
+  // 关闭标题设置对话框
+  const closeTitleDialog = () => {
+    setIsTitleDialogOpen(false)
+  }
+
+  // 确认标题设置并导出
+  const handleTitleConfirm = async (mainTitle: string, subTitle: string) => {
+    setIsTitleDialogOpen(false)
 
     try {
       setIsExporting(true)
-      setExportProgress({ current: 0, total: selectedStudentsList.length })
 
-      await batchExportReports(selectedStudentsList, addLog, (current, total) => {
-        setExportProgress({ current, total })
-      })
+      if (exportType === 'all') {
+        setExportProgress({ current: 0, total: students.length })
+        await batchExportReports(
+          students,
+          addLog,
+          (current, total) => setExportProgress({ current, total }),
+          mainTitle,
+          subTitle
+        )
+      } else if (exportType === 'selected') {
+        const selectedStudentsList = Array.from(selectedStudents).map((index) => students[index])
+        setExportProgress({ current: 0, total: selectedStudentsList.length })
+        await batchExportReports(
+          selectedStudentsList,
+          addLog,
+          (current, total) => setExportProgress({ current, total }),
+          mainTitle,
+          subTitle
+        )
+      } else if (exportType === 'single' && studentToExport) {
+        await exportStudentReport(studentToExport, addLog, false, mainTitle, subTitle)
+      }
     } catch (error) {
-      addLog(`批量导出过程中出错: ${error}`)
+      addLog(`导出过程中出错: ${error}`)
     } finally {
       setIsExporting(false)
       setExportProgress({ current: 0, total: 0 })
-    }
-  }
-
-  // 导出所有学生报告
-  const handleExportAll = async () => {
-    try {
-      setIsExporting(true)
-      setExportProgress({ current: 0, total: students.length })
-
-      await batchExportReports(students, addLog, (current, total) => {
-        setExportProgress({ current, total })
-      })
-    } catch (error) {
-      addLog(`批量导出过程中出错: ${error}`)
-    } finally {
-      setIsExporting(false)
-      setExportProgress({ current: 0, total: 0 })
-    }
-  }
-
-  // 导出单个学生报告
-  const handleExportSingle = async (student: StudentData) => {
-    try {
-      setIsExporting(true)
-      await exportStudentReport(student, addLog)
-    } catch (error) {
-      addLog(`导出 ${student.姓名} 的报告失败: ${error}`)
-    } finally {
-      setIsExporting(false)
+      setStudentToExport(null)
     }
   }
 
@@ -107,7 +124,7 @@ export default function ReportExporter({ students, addLog }: ReportExporterProps
       {/* 批量操作按钮 */}
       <div className="flex flex-wrap gap-3 mb-6">
         <button
-          onClick={handleExportAll}
+          onClick={openExportAllDialog}
           disabled={isExporting}
           className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
         >
@@ -116,7 +133,7 @@ export default function ReportExporter({ students, addLog }: ReportExporterProps
         </button>
 
         <button
-          onClick={handleExportSelected}
+          onClick={openExportSelectedDialog}
           disabled={isExporting || selectedStudents.size === 0}
           className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
         >
@@ -189,7 +206,7 @@ export default function ReportExporter({ students, addLog }: ReportExporterProps
               </div>
 
               <button
-                onClick={() => handleExportSingle(student)}
+                onClick={() => openExportSingleDialog(student)}
                 disabled={isExporting}
                 className="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
               >
@@ -213,6 +230,13 @@ export default function ReportExporter({ students, addLog }: ReportExporterProps
           <li>• 建议先选择部分学生测试导出效果，确认无误后再批量导出</li>
         </ul>
       </div>
+
+      {/* 标题设置对话框 */}
+      <TitleSettingsDialog
+        isOpen={isTitleDialogOpen}
+        onClose={closeTitleDialog}
+        onConfirm={handleTitleConfirm}
+      />
     </div>
   )
 }

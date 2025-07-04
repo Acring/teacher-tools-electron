@@ -61,7 +61,7 @@ export default function MultipleIntelligencePage() {
         }
 
         // 添加各个测评项目的成绩
-        headers.slice(2).forEach((header, index) => {
+        subHeaders.slice(2).forEach((header, index) => {
           if (header && header !== null) {
             const cellIndex = index + 2
             const value = row[cellIndex]
@@ -79,7 +79,6 @@ export default function MultipleIntelligencePage() {
 
         return student
       })
-      console.log('parsedStudents', parsedStudents)
 
       const intelligenceData: IntelligenceData = {
         name: workbook.SheetNames[0],

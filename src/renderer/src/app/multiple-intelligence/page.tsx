@@ -8,6 +8,11 @@ import StatisticsTable from './components/StatisticsTable'
 import OperationLogs from './components/OperationLogs'
 import ReportExporter from './components/ReportExporter'
 
+// 删除字符串中的引号
+function removeQuotes(str: string): string {
+  return str.replace(/["""''“”]/g, '')
+}
+
 export default function MultipleIntelligencePage() {
   const [isLoading, setIsLoading] = useState(false)
   const [testData, setTestData] = useState<IntelligenceData | null>(null)
@@ -63,8 +68,10 @@ export default function MultipleIntelligencePage() {
             const subHeader = subHeaders[cellIndex]
 
             if (typeof value === 'number') {
-              // 如果子表头存在，使用子表头作为字段名
-              const fieldName = subHeader && subHeader !== null ? String(subHeader) : String(header)
+              // 如果子表头存在，使用子表头作为字段名，并清理引号
+              let fieldName = subHeader && subHeader !== null ? String(subHeader) : String(header)
+              // 清理字段名中的引号
+              fieldName = removeQuotes(fieldName)
               student[fieldName] = value
             }
           }
@@ -72,6 +79,7 @@ export default function MultipleIntelligencePage() {
 
         return student
       })
+      console.log('parsedStudents', parsedStudents)
 
       const intelligenceData: IntelligenceData = {
         name: workbook.SheetNames[0],

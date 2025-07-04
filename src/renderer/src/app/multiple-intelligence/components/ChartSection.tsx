@@ -3,6 +3,11 @@ import * as echarts from 'echarts'
 import { StatisticsData, ChartType } from '../types'
 import { INTELLIGENCE_MAPPING } from '../templates/evaluation-templates'
 
+// 删除字符串中的引号
+function removeQuotes(str: string): string {
+  return str.replace(/["""''“”]/g, '')
+}
+
 interface ChartSectionProps {
   statistics: StatisticsData[]
   activeChart: ChartType
@@ -33,7 +38,18 @@ export default function ChartSection({
     // 计算每个分组的总分和项目数
     statistics.forEach((stat) => {
       for (const [group, subjects] of Object.entries(INTELLIGENCE_MAPPING)) {
-        if (subjects.includes(stat.subjectName)) {
+        // 在比较前删除引号
+        const cleanedSubjectName = removeQuotes(stat.subjectName)
+        const hasMatch = subjects.some((subject) => {
+          const cleanedSubject = removeQuotes(subject)
+          return (
+            cleanedSubject === cleanedSubjectName ||
+            cleanedSubject.includes(cleanedSubjectName) ||
+            cleanedSubjectName.includes(cleanedSubject)
+          )
+        })
+
+        if (hasMatch) {
           groupAverages[group] += stat.average
           groupCounts[group] += 1
           break

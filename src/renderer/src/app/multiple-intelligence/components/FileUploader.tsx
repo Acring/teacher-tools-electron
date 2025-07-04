@@ -1,5 +1,5 @@
 import { useRef } from 'react'
-import { downloadSampleFile } from '../utils/sample-data'
+// import { downloadSampleFile } from '../utils/sample-data'
 
 interface FileUploaderProps {
   isLoading: boolean
@@ -11,8 +11,8 @@ interface FileUploaderProps {
 export default function FileUploader({
   isLoading,
   onFileUpload,
-  onClearData,
-  addLog
+  onClearData
+  // addLog
 }: FileUploaderProps) {
   const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -23,14 +23,14 @@ export default function FileUploader({
     onClearData()
   }
 
-  const handleDownloadSample = () => {
-    const success = downloadSampleFile()
-    if (success) {
-      addLog('示例文件生成成功')
-    } else {
-      addLog('示例文件生成失败')
-    }
-  }
+  // const handleDownloadSample = () => {
+  //   const success = downloadSampleFile()
+  //   if (success) {
+  //     addLog('示例文件生成成功')
+  //   } else {
+  //     addLog('示例文件生成失败')
+  //   }
+  // }
 
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
@@ -45,12 +45,12 @@ export default function FileUploader({
           className="block text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100"
         />
         {isLoading && <span className="text-purple-600">📊 解析中...</span>}
-        <button
+        {/* <button
           onClick={handleDownloadSample}
           className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
         >
           📄 下载示例文件
-        </button>
+        </button> */}
         <button
           onClick={handleClearData}
           className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors"

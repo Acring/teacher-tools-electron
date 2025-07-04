@@ -18,14 +18,13 @@ export default function MorePage() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {tools.map((tool) => (
-          <div key={tool.path} className="border rounded-lg p-6 hover:shadow-md transition-shadow">
-            <div className="text-4xl mb-4">{tool.icon}</div>
-            <h2 className="text-xl font-semibold mb-2">{tool.title}</h2>
-            <p className="text-gray-600 mb-4">{tool.description}</p>
-            <Button asChild>
-              <Link to={tool.path}>打开</Link>
-            </Button>
-          </div>
+          <Link to={tool.path} key={tool.path}>
+            <div className="border rounded-lg p-6 hover:shadow-md transition-shadow">
+              <div className="text-4xl mb-4">{tool.icon}</div>
+              <h2 className="text-xl font-semibold mb-2">{tool.title}</h2>
+              <p className="text-gray-600 mb-4">{tool.description}</p>
+            </div>
+          </Link>
         ))}
       </div>
     </div>
